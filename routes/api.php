@@ -19,6 +19,17 @@ Route::middleware('auth:api')->group(function(){
      return response()->json([ 'error' => 500, 'message'=> 'Not found' ]);
   });
   Route::prefix('service')->group(function(){
+    Route::prefix('productos')->group(function(){
+      Route::get('/', 'Productos\ProductosController@listarProductos');
+      Route::post('crear', 'Productos\ProductosController@crearProducto');
+      Route::get('todos', 'Productos\ProductosController@todosProductos');
+    });
+    Route::prefix('clientes')->group(function(){
+      Route::get('/', 'Clientes\ClientesController@clientesGeneral');
+      Route::post('crear', 'Clientes\ClientesController@crearClientes');
+      Route::post('activar', 'Clientes\ClientesController@activar');
+      Route::post('inactivar', 'Clientes\ClientesController@inactivar');
+    });
     Route::prefix('usuarios')->group(function(){
       Route::post('/', 'Admin\UsuariosController@getUsers');
       Route::post('/crear', 'Admin\UsuariosController@create');
