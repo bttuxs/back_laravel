@@ -51,6 +51,10 @@ Route::middleware('auth:api')->group(function(){
       Route::post('crear', 'Preguntas\PreguntasController@crearPreguntas');
       Route::post('listar', 'Preguntas\PreguntasController@listarPreguntas');
       Route::post('remover', 'Preguntas\PreguntasController@removerPreguntas');
+      Route::post('responder', 'Preguntas\PreguntasController@guardarPreguntaRespuesta');
+    });
+    Route::prefix('media')->group(function(){
+      Route::post('/', 'Media\MediaController@cargaEvidencia');
     });
   });
 });
