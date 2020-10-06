@@ -21,6 +21,7 @@ Route::middleware('auth:api')->group(function(){
   Route::prefix('service')->group(function(){
     Route::prefix('productos')->group(function(){
       Route::get('/', 'Productos\ProductosController@listarProductos');
+      Route::post('subproductos', 'Productos\ProductosController@listarSubProductos');
       Route::post('crear', 'Productos\ProductosController@crearProducto');
       Route::get('todos', 'Productos\ProductosController@todosProductos');
     });
@@ -36,6 +37,20 @@ Route::middleware('auth:api')->group(function(){
       Route::post('/desactivar', 'Admin\UsuariosController@desactivar');
       Route::post('/activar', 'Admin\UsuariosController@activar');
       Route::post('/reenviomail', 'Admin\UsuariosController@reenviomail');
+    });
+    Route::prefix('sedes')->group(function(){
+      Route::get('/', 'Sedes\SedesController@generalSedes');
+      Route::post('/crear', 'Sedes\SedesController@crearSede');
+    });
+    Route::prefix('encuestas')->group(function(){
+      Route::get('/', 'Encuestas\EncuestasController@listarEncuestas');
+      Route::post('crear', 'Encuestas\EncuestasController@crearEncuesta');
+      Route::post('existe', 'Encuestas\EncuestasController@validarIdEncuesta');
+    });
+    Route::prefix('preguntas')->group(function(){
+      Route::post('crear', 'Preguntas\PreguntasController@crearPreguntas');
+      Route::post('listar', 'Preguntas\PreguntasController@listarPreguntas');
+      Route::post('remover', 'Preguntas\PreguntasController@removerPreguntas');
     });
   });
 });

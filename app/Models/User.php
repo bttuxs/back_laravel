@@ -24,7 +24,8 @@ class User extends Authenticatable
         'apellidoMaterno',
         'password',
         'activo',
-        'plataforma'
+        'plataforma',
+        'idCliente'
     ];
 
     /**

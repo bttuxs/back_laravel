@@ -13,6 +13,14 @@ class ProductosController extends Controller
     return response($productos);
   }
 
+  public function listarSubProductos(Request $request){
+    $validatedData = $request->validate([
+        'idProducto' => 'required',
+    ]);
+    $productos = Productos::where("productoPadre", $request->idProducto)->get();
+    return response($productos);
+  }
+
   public function todosProductos(){
     $productos = Productos::get();
     return response($productos);
