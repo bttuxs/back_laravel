@@ -45,7 +45,8 @@ class UsuariosController extends Controller
   }
 
   public function getUsers(Request $request){
-      $users = User::leftjoin('clientes', 'clientes.idCliente', '=', 'users.idCliente')->where('plataforma',$request->idUser)->get();
+//      $users = User::leftjoin('clientes', 'clientes.idCliente', '=', 'users.idCliente')->where('plataforma',$request->idUser)->get();
+      $users = User::where('plataforma',$request->idUser)->get();
       return response($users);
   }
 
