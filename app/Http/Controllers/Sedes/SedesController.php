@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Sedes;
 use App\Models\Domicilio;
+use App\Models\Cadena;
 class SedesController extends Controller
 {
   public function generalSedes(Request $request){
@@ -14,30 +15,30 @@ class SedesController extends Controller
     return response($sedes);
   }
 
+  public function cadenas(Request $request){
+    $sedes = Cadena::get();
+    return response($sedes);
+  }
+
+
   public function crearSede(Request $request){
-    DB::beginTransaction();
-    try{
-      $domicilioData = (array)$request->domicilio;
-      $idDomicilio = Domicilio::create($domicilioData)->id;
-      $sedeData = [
-        "nombre" => $request->sede["nombre"],
-        "idDomicilio" => $idDomicilio
-      ];
-      $sede = Sedes::create($sedeData);
-      DB::commit();
-      $response = ["status" => "true", "mensaje" => "Creacion de sede correcta."];
+    $validatedData = $request->validate([
+        'nombre' => 'required',
+        "tiendaNo" => 'required',
+        'idDomicilio' => '',
+        "idCadena" => 'required',
+        "tipoSede" => 'required',
+        "ciudad" => 'required',
+        "estado" => 'required',
+    ]);
+
+    $sede = Sedes::create($validatedData);
+    if($sede){
+      $response = ["status" => "true", "mensaje" => "creacion de producto correcta"];
       return response($response);
-    } catch(\Exception $e){
-      DB::rollBack();
-      $message = "";
-      if(strpos($e->getMessage(), 'Duplicate entry')){
-        $message = "Error al crear la sede, es posible que exista, valida e intenta de nuevo";
-      }else{
-        $message = "Error al crear sede valide la informacion e intente de nuevo.";
-      }
-      $response = ["status" => "false", "mensaje" => $message];
-      return response($response, 404);
     }
 
+    $response = ["status" => "false", "mensaje" => "Error al crear producto valide e intente de nuevo."];
+    return response($response, 404);
   }
 }

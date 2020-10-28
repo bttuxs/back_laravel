@@ -40,6 +40,7 @@ Route::middleware('auth:api')->group(function(){
     });
     Route::prefix('sedes')->group(function(){
       Route::get('/', 'Sedes\SedesController@generalSedes');
+      Route::get('/cadenas', 'Sedes\SedesController@cadenas');
       Route::post('/crear', 'Sedes\SedesController@crearSede');
     });
     Route::prefix('encuestas')->group(function(){

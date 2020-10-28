@@ -16,6 +16,10 @@ class Sedes extends Model
     protected $fillable = [
         'idSede',
         'nombre',
-        'idDomicilio'
+        'idDomicilio',
+        'tiendaNo',
+        'tipoSede',
+        'ciudad',
+        'estado'
     ];
 }

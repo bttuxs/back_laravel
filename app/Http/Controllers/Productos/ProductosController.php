@@ -30,7 +30,10 @@ class ProductosController extends Controller
     $validatedData = $request->validate([
         'nombre' => 'required',
         "descripcion" => 'required',
-        'productoPadre' => ''
+        'productoPadre' => '',
+        "presentacion" => 'required',
+        "contenido" => 'required',
+        "upc" => 'required',
     ]);
 
     if($validatedData['productoPadre'] == Null){
