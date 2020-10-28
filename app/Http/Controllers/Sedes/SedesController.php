@@ -10,7 +10,7 @@ use App\Models\Domicilio;
 class SedesController extends Controller
 {
   public function generalSedes(Request $request){
-    $sedes = Sedes::join('domicilio', 'sedes.idDomicilio', '=', 'domicilio.idDomicilio')->get();
+    $sedes = Sedes::get();
     return response($sedes);
   }
 

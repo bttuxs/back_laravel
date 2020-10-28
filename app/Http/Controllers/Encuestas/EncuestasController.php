@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Encuestas;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Encuesta;
-
+use App\Models\Respuestas;
 class EncuestasController extends Controller
 {
   public function crearEncuesta(Request $request){
@@ -39,5 +40,23 @@ class EncuestasController extends Controller
     }
     $response = ["status" => "false", "mensaje" => "No existe la encuesta"];
     return response($response, 404);
+  }
+
+  public function encuestasResuelta(){
+    $encuestas = DB::select(DB::raw("select encuesta.*, solucion.*, concat_ws(' ', users.nombre, users.apellidoPaterno) as usuario , clientes.razonSocial as cliente from encuesta
+                      inner join(SELECT distinct idEncuesta, uuid, idUser FROM respuestas) as solucion on solucion.idEncuesta = encuesta.idEncuestas
+                      left join users on users.id = solucion.idUser
+                      left join clientes on clientes.idCliente = encuesta.idCliente"));
+    return response($encuestas);
+  }
+
+  public function respuestas(Request $request){
+
+    $validatedData = $request->validate([
+        'uuid' => 'required',
+    ]);
+
+    $respuestas = Respuestas::leftJoin('encuesta', 'encuesta.idEncuestas', '=', 'respuestas.idEncuesta')->where('uuid', $request->uuid)->get();
+    return response($respuestas);
   }
 }

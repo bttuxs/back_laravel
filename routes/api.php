@@ -46,6 +46,8 @@ Route::middleware('auth:api')->group(function(){
       Route::get('/', 'Encuestas\EncuestasController@listarEncuestas');
       Route::post('crear', 'Encuestas\EncuestasController@crearEncuesta');
       Route::post('existe', 'Encuestas\EncuestasController@validarIdEncuesta');
+      Route::get('resuelta', 'Encuestas\EncuestasController@encuestasResuelta');
+      Route::post('respuestas', 'Encuestas\EncuestasController@respuestas');
     });
     Route::prefix('preguntas')->group(function(){
       Route::post('crear', 'Preguntas\PreguntasController@crearPreguntas');
