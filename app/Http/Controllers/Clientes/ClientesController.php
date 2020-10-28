@@ -29,6 +29,12 @@ class ClientesController extends Controller
     return response($clientes);
   }
 
+  public function clientesActivos(){
+    $clientes = Clientes::where('activo', 1)->get();
+    return response($clientes);
+  }
+
+
   public function activar(Request $request){
     $data_validacion = $request->validate([
       'idCliente' => 'required'

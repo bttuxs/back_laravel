@@ -56,7 +56,24 @@ class EncuestasController extends Controller
         'uuid' => 'required',
     ]);
 
-    $respuestas = Respuestas::leftJoin('encuesta', 'encuesta.idEncuestas', '=', 'respuestas.idEncuesta')->where('uuid', $request->uuid)->get();
-    return response($respuestas);
+    $respuestas = Respuestas::select('respuestas.*', 'encuesta.nombre','encuesta.descripcion','preguntas.pregunta', 'users.nombre as user', 'users.apellidoPaterno as ap', 'users.apellidoMaterno as am')
+                      ->leftJoin('encuesta', 'encuesta.idEncuestas', '=', 'respuestas.idEncuesta')
+                      ->leftJoin('preguntas', 'preguntas.idPregunta', '=', 'respuestas.idPregunta')
+                      ->leftJoin('users','users.id', '=', 'respuestas.idUser')
+                      ->where('uuid', $request->uuid)->get();
+    $pathImage = app()->basePath()."/app/Images/".$request->uuid;
+    if(file_exists($pathImage)){
+      $files = scandir($pathImage);
+      foreach ($files as $key => $value) {
+        if($value != "." && $value != ".."){
+          $img = $pathImage."/".$value;
+          $bin = file_get_contents($img);
+          $images[] = "data:image/png;base64,".base64_encode($bin);
+        }
+      }
+    }
+
+
+    return response(["encuesta" => $respuestas, "images" => $images]);
   }
 }

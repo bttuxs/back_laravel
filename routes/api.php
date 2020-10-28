@@ -27,6 +27,7 @@ Route::middleware('auth:api')->group(function(){
     });
     Route::prefix('clientes')->group(function(){
       Route::get('/', 'Clientes\ClientesController@clientesGeneral');
+      Route::get('/activos', 'Clientes\ClientesController@clientesActivos');
       Route::post('crear', 'Clientes\ClientesController@crearClientes');
       Route::post('activar', 'Clientes\ClientesController@activar');
       Route::post('inactivar', 'Clientes\ClientesController@inactivar');
