@@ -62,6 +62,7 @@ class EncuestasController extends Controller
                       ->leftJoin('users','users.id', '=', 'respuestas.idUser')
                       ->where('uuid', $request->uuid)->get();
     $pathImage = app()->basePath()."/app/Images/".$request->uuid;
+    $images = [];
     if(file_exists($pathImage)){
       $files = scandir($pathImage);
       foreach ($files as $key => $value) {
