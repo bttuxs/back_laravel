@@ -16,6 +16,7 @@ class Respuestas extends Model
     protected $fillable = [
         'idEncuesta',
         'uuid',
+        'idSede',
         'idPregunta',
         'respuesta',
         'idUser'

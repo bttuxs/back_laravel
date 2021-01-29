@@ -12,7 +12,7 @@ class EncuestasController extends Controller
   public function crearEncuesta(Request $request){
     $validatedData = $request->validate([
         'nombre' => 'required',
-        'descripcion' => '',
+        'descripcionEncuesta' => '',
         'idProducto' => 'required',
         'idSubProducto' => 'required',
         'idSede' => '',
@@ -23,11 +23,10 @@ class EncuestasController extends Controller
   }
 
   public function listarEncuestas(){
-    $encuestas = Encuesta::select('encuesta.*', 'categoria.nombre as categoria', 'subcategoria.nombre as subcategoria', 'clientes.*', 'sedes.nombre as sede')
+    $encuestas = Encuesta::select('encuesta.*', 'categoria.nombre as categoria', 'subcategoria.nombre as subcategoria', 'clientes.*')
                           ->join('productos as categoria','categoria.idProducto', '=','encuesta.idProducto' )
                           ->join('productos as subcategoria','subcategoria.idProducto', '=','encuesta.idSubProducto' )
                           ->leftJoin('clientes','clientes.idCliente', '=','encuesta.idCliente' )
-                          ->leftJoin('sedes','sedes.idSede', '=','encuesta.idSede' )
                           ->get();
     return response($encuestas);
   }
@@ -56,9 +55,12 @@ class EncuestasController extends Controller
         'uuid' => 'required',
     ]);
 
-    $respuestas = Respuestas::select('respuestas.*', 'encuesta.nombre','encuesta.descripcion','preguntas.pregunta', 'users.nombre as user', 'users.apellidoPaterno as ap', 'users.apellidoMaterno as am')
+    $respuestas = Respuestas::select('respuestas.*', 'productos.*', 'categoria.nombre as producto', 'sedes.*', 'sedes.nombre as tienda', 'encuesta.nombre','encuesta.descripcionEncuesta','preguntas.pregunta', 'users.nombre as user', 'users.apellidoPaterno as ap', 'users.apellidoMaterno as am')
                       ->leftJoin('encuesta', 'encuesta.idEncuestas', '=', 'respuestas.idEncuesta')
+                      ->leftJoin('productos', 'encuesta.idSubProducto', '=', 'productos.idProducto')
+                      ->leftJoin('productos  as categoria', 'categoria.idProducto', '=', 'productos.productoPadre')
                       ->leftJoin('preguntas', 'preguntas.idPregunta', '=', 'respuestas.idPregunta')
+                      ->leftJoin('sedes', 'sedes.idSede', '=', 'respuestas.idSede')
                       ->leftJoin('users','users.id', '=', 'respuestas.idUser')
                       ->where('uuid', $request->uuid)->get();
     $pathImage = app()->basePath()."/app/Images/".$request->uuid;

@@ -24,6 +24,8 @@ Route::middleware('auth:api')->group(function(){
       Route::post('subproductos', 'Productos\ProductosController@listarSubProductos');
       Route::post('crear', 'Productos\ProductosController@crearProducto');
       Route::get('todos', 'Productos\ProductosController@todosProductos');
+      Route::post('faltantes', 'Productos\ProductosController@faltantes');
+      Route::get('faltantes/listar', 'Productos\ProductosController@listaFaltantes');
     });
     Route::prefix('clientes')->group(function(){
       Route::get('/', 'Clientes\ClientesController@clientesGeneral');

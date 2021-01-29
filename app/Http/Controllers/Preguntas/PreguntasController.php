@@ -56,6 +56,7 @@ class PreguntasController extends Controller
         $data =[
           "idUser" => $idUser,
           "idEncuesta" => $request->idEncuesta,
+          "idSede" => $request->idSede,
           "uuid" => $uuid,
           "idPregunta" => $key,
           "respuesta" => $value
@@ -69,9 +70,9 @@ class PreguntasController extends Controller
       DB::rollBack();
       $message = "";
       if(strpos($e->getMessage(), 'Duplicate entry')){
-        $message = "Error al crear la sede, es posible que exista, valida e intenta de nuevo";
+        $message = "Error al guardar la respuesta, es posible que exista, valida e intenta de nuevo";
       }else{
-        $message = "Error al crear sede valide la informacion e intente de nuevo.";
+        $message = "Error al guardar la respuesta valide la informacion e intente de nuevo.";
       }
       $response = ["status" => "false", "mensaje" => $message];
       return response($response, 404);

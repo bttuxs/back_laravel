@@ -18,7 +18,7 @@ class Productos extends Model
         'idProducto',
         'productoPadre',
         'nombre',
-        'descripcion',
+        'descripcionProducto',
         'presentacion',
         'contenido',
         'upc',

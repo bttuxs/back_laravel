@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Encuesta extends Model
+class Faltantes extends Model
 {
-    protected $table = "encuesta";
+    protected $table = "faltantes";
     use HasFactory;
     /**
      * The attributes that are mass assignable.
@@ -15,11 +15,7 @@ class Encuesta extends Model
      * @var array
      */
     protected $fillable = [
-        'idEncuesta',
-        'nombre',
-        'descripcionEncuesta',
-        'idProducto',
-        'idSubProducto',
-        'idCliente'
+        'idSede',
+        'idProducto'
     ];
 }
