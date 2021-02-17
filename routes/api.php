@@ -22,11 +22,18 @@ Route::middleware('auth:api')->group(function(){
     Route::prefix('productos')->group(function(){
       Route::get('/', 'Productos\ProductosController@listarProductos');
       Route::post('subproductos', 'Productos\ProductosController@listarSubProductos');
+      Route::get('subproductos/general', 'Productos\ProductosController@listarSubProductosGeneral');
       Route::post('crear', 'Productos\ProductosController@crearProducto');
       Route::get('todos', 'Productos\ProductosController@todosProductos');
       Route::post('faltantes', 'Productos\ProductosController@faltantes');
       Route::get('faltantes/listar', 'Productos\ProductosController@listaFaltantes');
     });
+    Route::prefix('precios')->group(function(){
+      Route::get('chequeo', 'Productos\PrecioController@listarChequeos');
+      Route::post('producto', 'Productos\PrecioController@precioProducto');
+      Route::post('guardar', 'Productos\PrecioController@guardarChequeo');
+    });
+
     Route::prefix('clientes')->group(function(){
       Route::get('/', 'Clientes\ClientesController@clientesGeneral');
       Route::get('/activos', 'Clientes\ClientesController@clientesActivos');

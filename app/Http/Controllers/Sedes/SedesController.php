@@ -11,7 +11,7 @@ use App\Models\Cadena;
 class SedesController extends Controller
 {
   public function generalSedes(Request $request){
-    $sedes = Sedes::get();
+    $sedes = Sedes::join("cadena", "cadena.idCadena","=", "sedes.idCadena")->get();
     return response($sedes);
   }
 

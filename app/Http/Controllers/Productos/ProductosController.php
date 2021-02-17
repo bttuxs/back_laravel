@@ -22,6 +22,11 @@ class ProductosController extends Controller
     return response($productos);
   }
 
+  public function listarSubProductosGeneral(Request $request){
+    $productos = Productos::where("productoPadre", '>', '0')->get();
+    return response($productos);
+  }
+
   public function todosProductos(){
     $productos = Productos::get();
     return response($productos);
