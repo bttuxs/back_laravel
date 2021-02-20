@@ -61,11 +61,14 @@ class ProductosController extends Controller
     $validatedData = $request->validate([
         'idSede' => 'required',
         "idProducto" => 'required',
+        "situacion" => 'required'
     ]);
+    $uuid = md5('faltantes'.date('Y-m-d G:i:s'));
+    $validatedData["images"] = $uuid;
 
     $faltantes = Faltantes::create($validatedData);
     if($faltantes){
-      $response = ["status" => "true", "mensaje" => "creacion de producto correcta"];
+      $response = ["status" => "true", "mensaje" => "creacion de producto correcta", "uuid" => $uuid];
       return response($response);
     }
 
@@ -74,8 +77,9 @@ class ProductosController extends Controller
   }
 
   public function listaFaltantes(){
-    $productos = Faltantes::select('productos.*', 'productos.nombre as nombreProducto', 'categoria.nombre as categoria','sedes.*', 'sedes.nombre as nombreSede', 'faltantes.*')
+    $productos = Faltantes::select('productos.*', 'productos.nombre as nombreProducto', 'categoria.nombre as categoria','sedes.*', 'sedes.nombre as nombreSede', 'cadena.*', 'faltantes.*')
                 ->leftJoin('sedes', 'sedes.idSede','=', 'faltantes.idSede')
+                ->leftJoin('cadena', 'cadena.idCadena','=', 'sedes.idCadena')
                 ->leftJoin('productos', 'productos.idProducto', '=', 'faltantes.idProducto')
                 ->leftJoin('productos  as categoria', 'categoria.idProducto', '=', 'productos.productoPadre')
                 ->get();

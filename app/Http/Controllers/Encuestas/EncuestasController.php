@@ -42,7 +42,7 @@ class EncuestasController extends Controller
   }
 
   public function encuestasResuelta(){
-    $encuestas = DB::select(DB::raw("select encuesta.*, solucion.*, concat_ws(' ', users.nombre, users.apellidoPaterno) as usuario , clientes.razonSocial as cliente from encuesta
+    $encuestas = DB::select(DB::raw("select encuesta.*, concat_ws(' ', users.nombre, users.apellidoPaterno) as usuario , clientes.razonSocial as cliente, solucion.* from encuesta
                       inner join(SELECT distinct idEncuesta, uuid, idUser FROM respuestas) as solucion on solucion.idEncuesta = encuesta.idEncuestas
                       left join users on users.id = solucion.idUser
                       left join clientes on clientes.idCliente = encuesta.idCliente"));
@@ -55,12 +55,13 @@ class EncuestasController extends Controller
         'uuid' => 'required',
     ]);
 
-    $respuestas = Respuestas::select('respuestas.*', 'productos.*', 'categoria.nombre as producto', 'sedes.*', 'sedes.nombre as tienda', 'encuesta.nombre','encuesta.descripcionEncuesta','preguntas.pregunta', 'users.nombre as user', 'users.apellidoPaterno as ap', 'users.apellidoMaterno as am')
+    $respuestas = Respuestas::select('respuestas.*', 'productos.*', 'categoria.nombre as producto', 'sedes.*', 'cadena.*', 'sedes.nombre as tienda', 'encuesta.nombre','encuesta.descripcionEncuesta','preguntas.pregunta', 'users.nombre as user', 'users.apellidoPaterno as ap', 'users.apellidoMaterno as am')
                       ->leftJoin('encuesta', 'encuesta.idEncuestas', '=', 'respuestas.idEncuesta')
                       ->leftJoin('productos', 'encuesta.idSubProducto', '=', 'productos.idProducto')
                       ->leftJoin('productos  as categoria', 'categoria.idProducto', '=', 'productos.productoPadre')
                       ->leftJoin('preguntas', 'preguntas.idPregunta', '=', 'respuestas.idPregunta')
                       ->leftJoin('sedes', 'sedes.idSede', '=', 'respuestas.idSede')
+                      ->leftJoin('cadena', 'cadena.idCadena', '=', 'sedes.idCadena')
                       ->leftJoin('users','users.id', '=', 'respuestas.idUser')
                       ->where('uuid', $request->uuid)->get();
     $pathImage = app()->basePath()."/app/Images/".$request->uuid;

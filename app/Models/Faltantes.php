@@ -16,6 +16,9 @@ class Faltantes extends Model
      */
     protected $fillable = [
         'idSede',
-        'idProducto'
+        'idProducto',
+        'images',
+        'situacion',
+        'piezas'
     ];
 }

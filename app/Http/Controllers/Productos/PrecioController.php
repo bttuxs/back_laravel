@@ -10,11 +10,12 @@ use App\Models\Precios;
 class PrecioController extends Controller
 {
     public function listarChequeos(){
-      $precios = ChequeoPrecios::select('productos.*', 'sedes.*', 'precios.precio', 'chequeoPrecio.*', 'productos.nombre as nombreProducto', 'sedes.nombre as nombreSede', 'categoria.nombre as categoria')
+      $precios = ChequeoPrecios::select('productos.*', 'sedes.*', 'cadena.*', 'precios.precio', 'chequeoPrecio.*', 'productos.nombre as nombreProducto', 'sedes.nombre as nombreSede', 'categoria.nombre as categoria')
                                 ->leftJoin('precios','precios.idPrecio', '=', 'chequeoPrecio.idPrecio')
                                 ->leftJoin('productos', 'productos.idProducto', '=', 'precios.idProducto')
                                 ->leftJoin('productos as categoria', 'categoria.idProducto', '=', 'productos.productoPadre')
-                                ->leftJoin('sedes', 'sedes.idSede', '=', 'precios.idSede')->get();
+                                ->leftJoin('sedes', 'sedes.idSede', '=', 'precios.idSede')
+                                ->leftJoin("cadena", "cadena.idCadena", "=", "sedes.idCadena")->get();
       return response($precios);
     }
 
