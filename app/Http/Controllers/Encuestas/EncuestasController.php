@@ -23,10 +23,9 @@ class EncuestasController extends Controller
   }
 
   public function listarEncuestas(){
-    $encuestas = Encuesta::select('encuesta.*', 'categoria.nombre as categoria', 'subcategoria.nombre as subcategoria', 'clientes.*')
+    $encuestas = Encuesta::select('categoria.nombre as categoria', 'subcategoria.nombre as subcategoria', 'encuesta.*')
                           ->join('productos as categoria','categoria.idProducto', '=','encuesta.idProducto' )
                           ->join('productos as subcategoria','subcategoria.idProducto', '=','encuesta.idSubProducto' )
-                          ->leftJoin('clientes','clientes.idCliente', '=','encuesta.idCliente' )
                           ->get();
     return response($encuestas);
   }
@@ -42,10 +41,12 @@ class EncuestasController extends Controller
   }
 
   public function encuestasResuelta(){
-    $encuestas = DB::select(DB::raw("select encuesta.*, concat_ws(' ', users.nombre, users.apellidoPaterno) as usuario , clientes.razonSocial as cliente, solucion.* from encuesta
-                      inner join(SELECT distinct idEncuesta, uuid, idUser FROM respuestas) as solucion on solucion.idEncuesta = encuesta.idEncuestas
+    $encuestas = DB::select(DB::raw("select cadena.nombreCadena, sedes.nombre as nombreSede, sedes.tiendaNo, resuelta.* from (select encuesta.*, concat_ws(' ', users.nombre, users.apellidoPaterno) as usuario , clientes.razonSocial as cliente, solucion.* from encuesta
+                      inner join(SELECT distinct idEncuesta, uuid, idUser, idSede FROM respuestas) as solucion on solucion.idEncuesta = encuesta.idEncuestas
                       left join users on users.id = solucion.idUser
-                      left join clientes on clientes.idCliente = encuesta.idCliente"));
+                      left join clientes on clientes.idCliente = encuesta.idCliente) as resuelta
+                      left join sedes on sedes.idSede = resuelta.idSede
+                      left join cadena on cadena.idCadena = sedes.idCadena"));
     return response($encuestas);
   }
 
