@@ -41,4 +41,23 @@ class SedesController extends Controller
     $response = ["status" => "false", "mensaje" => "Error al crear producto valide e intente de nuevo."];
     return response($response, 404);
   }
+
+  public function filtrarSedes(Request $request){
+    $validatedData = $request->validate([
+      'filtroSede' => 'required'
+    ]);
+    $sedes = Sedes::join("cadena", "cadena.idCadena","=", "sedes.idCadena");
+    $data  = $request->filtroSede;
+    $data = explode(" ", $data);
+    foreach ($data as $string) {
+      $sedes->where('nombreCadena', 'like',"%{$string}%");
+      $sedes->orWhere('nombre', 'like',"%{$string}%");
+      if(is_numeric($string)){
+        $sedes->orWhere('tiendaNo', "=", $string);
+      }
+    }
+    $sedes = $sedes->get();
+
+    return response($sedes);
+  }
 }

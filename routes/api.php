@@ -52,6 +52,7 @@ Route::middleware('auth:api')->group(function(){
       Route::get('/', 'Sedes\SedesController@generalSedes');
       Route::get('/cadenas', 'Sedes\SedesController@cadenas');
       Route::post('/crear', 'Sedes\SedesController@crearSede');
+      Route::post('/filtrar', 'Sedes\SedesController@filtrarSedes');
     });
     Route::prefix('encuestas')->group(function(){
       Route::get('/', 'Encuestas\EncuestasController@listarEncuestas');
