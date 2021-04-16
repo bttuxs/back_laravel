@@ -65,6 +65,7 @@ class ProductosController extends Controller
     ]);
     $uuid = md5('faltantes'.date('Y-m-d G:i:s'));
     $validatedData["images"] = $uuid;
+    $validatedData["idSede"] = $validatedData["idSede"]["idSede"];
 
     $faltantes = Faltantes::create($validatedData);
     if($faltantes){

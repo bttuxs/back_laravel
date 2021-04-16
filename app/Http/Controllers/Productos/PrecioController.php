@@ -14,16 +14,22 @@ class PrecioController extends Controller
                                 ->leftJoin('precios','precios.idPrecio', '=', 'chequeoPrecio.idPrecio')
                                 ->leftJoin('productos', 'productos.idProducto', '=', 'precios.idProducto')
                                 ->leftJoin('productos as categoria', 'categoria.idProducto', '=', 'productos.productoPadre')
-                                ->leftJoin('sedes', 'sedes.idSede', '=', 'precios.idSede')
+                                ->leftJoin('sedes', 'sedes.idSede', '=', 'chequeoPrecio.idTienda')
                                 ->leftJoin("cadena", "cadena.idCadena", "=", "sedes.idCadena")->get();
       return response($precios);
     }
 
     public function precioProducto(Request $request){
       $validatedData = $request->validate([
-          'idSede' => 'required'
+          'idSede' => 'required',
+          'propios' => ''
       ]);
-      $precio = Precios::join("productos", "productos.idProducto", "=", "precios.idProducto")->where("idSede", $request->idSede)->get();
+      $precio = Precios::join("productos", "productos.idProducto", "=", "precios.idProducto")->where("productos.idCadena", $request->idSede);
+      if($request->propios){
+        $precio->where("productos.propios", "1");
+      }
+
+      $precio = $precio->get();
       return response($precio);
     }
 
@@ -32,6 +38,7 @@ class PrecioController extends Controller
       $fechaInicio = date('Y-m-d', strtotime($request->fechaInicioPromocion));
       $fechaTermino =date('Y-m-d', strtotime( $request->fechaTerminoPromocion));
       $data = ["idPrecio" => $request->idProducto['idPrecio'],
+              "idTienda" => $request->idSede['idSede'],
               "precioPromocion" => $request->precioPromocion,
               "fechaInicioPromocion" => $fechaInicio,
               "fechaTerminoPromocion" =>$fechaTermino,

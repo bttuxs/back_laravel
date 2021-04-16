@@ -11,6 +11,7 @@ class ChequeoPrecios extends Model
     use HasFactory;
     protected $fillable = [
         'idPrecio',
+        'idTienda',
         'precioPromocion',
         'fechaInicioPromocion',
         'images',
